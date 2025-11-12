@@ -1,13 +1,18 @@
 {
   "name": "bike-rental-web",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "packageManager": "pnpm@10.22.0",
+  "workspaces": [
+    "login-signup",
+    "ui-shared"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.22.0"
+    "install": "pnpm install",
+    "start": "pnpm --filter login-signup start",
+    "dev": "pnpm --filter login-signup dev",
+    "start:ui": "pnpm --filter ui-shared start",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint"
+  }
 }
