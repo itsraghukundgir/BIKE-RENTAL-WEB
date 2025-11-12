@@ -1,0 +1,53 @@
+/* Signup.css - shared clean auth styling */
+.auth-container {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    background: transparent; /* global index controls page bg */
+  }
+  
+  .auth-box {
+    width: 420px;
+    max-width: calc(100% - 48px);
+    background-color: var(--card);
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(15,23,42,0.08);
+  }
+  
+  /* Typography */
+  .auth-box h2 { margin: 0 0 18px 0; text-align: center; font-size: 22px; }
+  .form-group { margin-bottom: 14px; display: flex; flex-direction: column; }
+  label { margin-bottom: 6px; font-weight: 500; color: var(--muted); }
+  
+  /* Inputs / button */
+  input {
+    padding: 10px 12px;
+    border: 1px solid #e6eef7;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #fff;
+    color: var(--text);
+  }
+  input:focus { outline: none; box-shadow: 0 0 0 3px rgba(37,99,235,0.08); border-color: var(--accent); }
+  
+  button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    background: #111827;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+  }
+  
+  /* errors */
+  .error { color: var(--danger); font-size: 13px; margin-top: 6px; text-align: left; }
+  .server-error { color: var(--danger); text-align: center; margin: 12px 0; }
+  
+  /* footer link */
+  .auth-footer { margin-top: 12px; text-align: center; font-size: 14px; color: var(--muted); }
+  

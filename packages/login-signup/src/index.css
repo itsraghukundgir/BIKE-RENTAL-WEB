@@ -1,0 +1,17 @@
+/* index.css - global baseline */
+:root {
+  --bg: #f7fafc;        /* page background */
+  --card: #ffffff;      /* form card */
+  --text: #111827;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --danger: #dc2626;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; padding: 0; font-family: Inter, Arial, sans-serif; background: var(--bg); color: var(--text); }
+a { color: var(--accent); text-decoration: none; }
+button { font-family: inherit; }
+
+/* If any accidental large overlay exists, hide it (development safety) */
+.dev-hide-overlay { display: none !important; background: transparent !important; }
