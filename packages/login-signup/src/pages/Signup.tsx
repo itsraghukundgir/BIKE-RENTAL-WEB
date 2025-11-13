@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signup } from '../features/auth/authSlice';
 import { useNavigate, Link } from 'react-router-dom';
 import type { AppDispatch, RootState } from '../app/store';
-import './Signup.css';  // 👈 external stylesheet
+import './Signup.css';  // external stylesheet
 
 // Define TypeScript type for the form fields
 type FormValues = {
@@ -14,69 +14,69 @@ type FormValues = {
   email: string;
   password: string;
   phoneNumber?: string;
-  role: string;
+  role: 'RENTER' | 'SUPPLIER';
 };
 
 // Validation schema using Yup
-const schema = yup.object({
-  name: yup.string().required('Name is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  password: yup.string().min(6, 'Minimum 6 chars').required('Password is required'),
-  phoneNumber: yup.string().optional(),
-  role: yup.string().required('Role is required'),
-}).required();
+const schema = yup
+  .object({
+    name: yup.string().required('Name is required'),
+    email: yup.string().email('Invalid email').required('Email is required'),
+    password: yup.string().min(6, 'Minimum 6 chars').required('Password is required'),
+    phoneNumber: yup.string().optional(),
+    role: yup.string().oneOf(['RENTER', 'SUPPLIER']).required('Role is required'),
+  })
+  .required();
 
-export default function Signup() {
+export default function Signup(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { loading, error } = useSelector((s: RootState) => s.auth);
 
-
-
-  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
     resolver: yupResolver(schema),
     defaultValues: { role: 'RENTER' },
   });
 
-  // inside component (Login or Signup)
-const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-const onSubmit = async (data: any) => {
-  // defensive: ignore empty payloads
-  if (!data || (Object.keys(data).length === 0 && data.constructor === Object)) {
-    console.warn('Ignored submit with empty payload');
-    return;
-  }
-
-  // guard against double-clicks / double-invokes
-  if (isSubmitting) return;
-  setIsSubmitting(true);
-
-  try {
-    // debug: see what we are sending
-    console.debug('Submitting payload:', data);
-
-    // dispatch the appropriate thunk
-    // Login file: const res = await dispatch(login(data));
-    // Signup file: const res = await dispatch(signup(data));
-    const res = await dispatch(signup(data));
-
-    // handle result:
-    if (res.type === 'auth/login/fulfilled') {
-      navigate('/dashboard');
-    } else if (res.type === 'auth/signup/fulfilled') {
-      navigate('/login');
-    } else {
-      // optional: show res.payload for debugging
-      console.warn('Thunk result:', res);
+  const onSubmit = async (data: any) => {
+    // defensive: ignore empty payloads
+    if (!data || (Object.keys(data).length === 0 && data.constructor === Object)) {
+      console.warn('Ignored submit with empty payload');
+      return;
     }
-  } catch (err) {
-    console.error('submit error', err);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
 
+    // guard against double-clicks / double-invokes
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    try {
+      // debug: see what we are sending
+      console.debug('Submitting payload:', data);
+
+      // dispatch the signup thunk
+      const res = await dispatch(signup(data));
+
+      // handle result:
+      if (res.type === 'auth/login/fulfilled') {
+        navigate('/dashboard');
+      } else if (res.type === 'auth/signup/fulfilled') {
+        navigate('/login');
+      } else {
+        // optional: show res.payload for debugging
+        console.warn('Thunk result:', res);
+      }
+    } catch (err) {
+      console.error('submit error', err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="auth-container">
@@ -107,17 +107,41 @@ const onSubmit = async (data: any) => {
             <input {...register('phoneNumber')} />
           </div>
 
+          {/* Role as inline circular radio buttons */}
           <div className="form-group">
             <label>Role</label>
-            <input {...register('role')} defaultValue="RENTER" />
+
+            <div className="role-options" style={{ marginTop: 6 }}>
+              <label className="role-option">
+                <input
+                  type="radio"
+                  value="RENTER"
+                  {...register('role')}
+                  defaultChecked
+                />
+                <span className="role-circle" />
+                <span className="role-label-text">RENTER</span>
+              </label>
+
+              <label className="role-option">
+                <input
+                  type="radio"
+                  value="SUPPLIER"
+                  {...register('role')}
+                />
+                <span className="role-circle" />
+                <span className="role-label-text">SUPPLIER</span>
+              </label>
+            </div>
+
             <span className="error">{errors.role?.message}</span>
           </div>
 
           {error && <div className="server-error">{error}</div>}
 
-        <button type="submit" disabled={loading || isSubmitting}>
-                {loading || isSubmitting ? 'Processing...' : 'Sign up'}
-        </button>
+          <button type="submit" disabled={loading || isSubmitting}>
+            {loading || isSubmitting ? 'Processing...' : 'Sign up'}
+          </button>
         </form>
 
         <p className="auth-footer">

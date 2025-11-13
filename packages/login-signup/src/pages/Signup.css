@@ -50,4 +50,56 @@
   
   /* footer link */
   .auth-footer { margin-top: 12px; text-align: center; font-size: 14px; color: var(--muted); }
-  
+
+/* role options inline and spacing */
+.role-options {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* hide native radio input but keep it accessible */
+.role-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* label container */
+.role-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  padding: 2px 4px;
+}
+
+/* circular marker */
+.role-circle {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #2563eb;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+}
+
+/* inner dot when selected (uses sibling + selector) */
+.role-option input[type="radio"]:checked + .role-circle::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: #2563eb;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+
+/* text label */
+.role-label-text {
+  font-size: 0.95rem;
+  color: #0b2545;
+}
